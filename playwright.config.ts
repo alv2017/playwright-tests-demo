@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const projectBaseURL = "https://saucedemo.com";
+
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -26,17 +28,26 @@ export default defineConfig({
     /* Limit the whole test run, so that it fails with a report instead of hanging */
     globalTimeout: 60 * 60 * 1000,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-    reporter: [["list"], ["html", { open: "never" }]],
+    reporter: [
+        ["list"], 
+        ["html", { 
+            open: "never",
+            outputFolder: "playwright-report",
+            title: "Test Results for " + projectBaseURL,
+        }],
+
+    ],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         /* Base URL to use in actions like `await page.goto('')`. */
-        baseURL: "https://saucedemo.com",
+        baseURL: projectBaseURL,
         /* Run tests in headed mode */
         headless: true,
         /* Make screenshot on failure only */
         screenshot: "only-on-failure",
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
         trace: "retain-on-failure",
+        video: "retain-on-failure",
         testIdAttribute: "data-test",
     },
 
@@ -77,11 +88,4 @@ export default defineConfig({
         //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
         // },
     ],
-
-    /* Run your local dev server before starting the tests */
-    // webServer: {
-    //   command: 'npm run start',
-    //   url: 'http://localhost:3000',
-    //   reuseExistingServer: !process.env.CI,
-    // },
 });

@@ -91,9 +91,9 @@ jobs:
                   destination_dir: ${{ steps.report.outputs.path }}
                   keep_files: true
 
-            - name: Add Report Link
-              env:
-                  REPORT_URL: ${{ steps.report.outputs.url }}
-              run: |
-                  echo "## 🎭 Playwright Report" >> "$GITHUB_STEP_SUMMARY"
-                  echo "[View Interactive HTML Report](${REPORT_URL})"
+            # - name: Add Report Link
+            #   env:
+            #       REPORT_URL: ${{ steps.report.outputs.url }}
+            #   run: |
+            #       echo "## 🎭 Playwright Report" >> "$GITHUB_STEP_SUMMARY"
+            #       echo "[View Interactive HTML Report](${REPORT_URL})"

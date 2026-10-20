@@ -4,13 +4,21 @@ on:
         branches: [main]
     pull_request:
         branches: [main]
+
+permissions:
+    contents: read
+
+concurrency:
+    group: playwright-reports
+    cancel-in-progress: false
+
 jobs:
     test:
         timeout-minutes: 30
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@v5
+            - uses: actions/setup-node@v5
               with:
                   node-version: lts/*
             - name: Install dependencies - clean install
@@ -19,9 +27,66 @@ jobs:
               run: npx playwright install --with-deps
             - name: Run Playwright tests
               run: npx playwright test tests/
-            - uses: actions/upload-artifact@v4
+            - name: Save Playwright report to artifacts
+              uses: actions/upload-artifact@v6
               if: ${{ !cancelled() }}
               with:
                   name: playwright-report
                   path: playwright-report/
                   retention-days: 14
+    test-report:
+        name: Deploy Playwright Report
+        needs: test
+
+        if: >-
+            ${{
+              always() &&
+                (
+                    github.event_name == 'push' ||
+                    (
+                        github.event_name == 'pull_request' &&
+                        github.event.pull_request.head.repo.full_name == github.repository
+                    )
+                )
+            }}
+
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: write
+
+        environment:
+            name: playwright-reports
+            url: ${{ steps.report.outputs.url }}
+
+        steps:
+            - name: Generate report URL
+              id: report
+              env:
+                  OWNER: ${{ github.repository_owner }}
+                  REPO: ${{ github.event.repository.name }}
+                  SHA: ${{ github.sha }}
+              run: |
+                  DATE=$(date -u +'%Y-%m-%d')
+                  OWNER="${OWNER,,}"
+
+                  REPORT_PATH="reports/${DATE}/${SHA}"
+                  REPORT_URL="https://${OWNER}.github.io/${REPO}/${REPORT_PATH}/"
+
+                  echo "path=${REPORT_PATH}" >> "$GITHUB_OUTPUT"
+                  echo "url=${REPORT_URL}" >> "$GITHUB_OUTPUT"
+
+            - name: Download Playwright Report
+              uses: actions/download-artifact@v5
+              with:
+                  name: playwright-report
+                  path: playwright-report/
+
+            - name: Publish Playwright Report
+              uses: peaceiris/actions-gh-pages@v4
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./playwright-report
+                  publish_branch: gh-pages
+                  destination_dir: ${{ steps.report.outputs.path }}
+                  keep_files: true

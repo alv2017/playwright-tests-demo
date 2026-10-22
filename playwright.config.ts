@@ -29,13 +29,15 @@ export default defineConfig({
     globalTimeout: 60 * 60 * 1000,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     reporter: [
-        ["list"], 
-        ["html", { 
-            open: "never",
-            outputFolder: "playwright-report",
-            title: "Test Results for " + projectBaseURL,
-        }],
-
+        ["list"],
+        [
+            "html",
+            {
+                open: "never",
+                outputFolder: "playwright-report",
+                title: "Test Results for " + projectBaseURL,
+            },
+        ],
     ],
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A Playwright end-to-end testing project." />
+    <title>Playwright Tests Demo</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --text: #f0f6fc;
+        --muted: #9aa8bd;
+        --border: rgba(148, 163, 184, 0.25);
+        --canvas: #09111f;
+        --subtle: rgba(19, 31, 54, 0.82);
+        --link: #66d9ef;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 12% 0%, rgba(82, 74, 190, 0.23), transparent 30rem),
+          radial-gradient(circle at 92% 24%, rgba(32, 185, 211, 0.13), transparent 23rem),
+          var(--canvas);
+        font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      }
+
+      .page { width: min(100% - 32px, 920px); margin: 0 auto; }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 20px 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .repository { margin: 0; font-size: 0.95rem; font-weight: 600; }
+      .repository span { color: var(--muted); font-weight: 400; }
+      a { color: var(--link); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+
+      .github-link {
+        padding: 6px 12px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: #06111e;
+        border-color: #8de8f5;
+        background: linear-gradient(135deg, #8de8f5, #a5b4fc);
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+      .github-link:hover { background: linear-gradient(135deg, #b8f4fa, #c4ceff); text-decoration: none; transform: translateY(-1px); }
+      .github-link svg { width: 17px; height: 17px; vertical-align: -3px; margin-right: 6px; fill: currentColor; }
+
+      main { padding: 46px 0 56px; }
+      h1 { margin: 0 0 8px; font-size: clamp(2.2rem, 5vw, 3rem); line-height: 1.2; letter-spacing: -0.035em; background: linear-gradient(110deg, #ffffff, #9aeaf6 58%, #b9adff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      h2 { margin: 42px 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); color: #5eead4; font-size: 1.5rem; line-height: 1.3; }
+      p { max-width: 760px; }
+      .description { margin-top: 0; color: var(--muted); font-size: 1.15rem; }
+      code { padding: 0.15em 0.35em; border: 1px solid rgba(102, 217, 239, 0.14); border-radius: 5px; color: #9deaf4; background: rgba(102, 217, 239, 0.09); font: 0.88em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+      .topics { margin: 20px 0; padding: 0; overflow: hidden; list-style: none; border: 1px solid var(--border); border-radius: 9px; background: rgba(15, 27, 48, 0.66); box-shadow: 0 12px 38px rgba(0, 0, 0, 0.13); }
+      .topics li { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+      .topics li:last-child { border-bottom: 0; }
+      .topics li::before { margin-right: 10px; color: #72e3a6; content: "✓"; font-weight: 700; }
+
+      .note { margin-top: 26px; padding: 16px; border: 1px solid rgba(139, 124, 255, 0.35); border-radius: 9px; background: linear-gradient(100deg, rgba(83, 70, 175, 0.18), rgba(18, 58, 80, 0.22)); }
+      .note p { margin: 0; }
+
+      footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0 34px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.875rem; }
+      .attribution { color: var(--muted); }
+      .heart { color: #fb7185; text-shadow: 0 0 12px rgba(251, 113, 133, 0.7); }
+      .footer-repo { display: inline-flex; align-items: center; gap: 7px; }
+      .footer-repo svg { width: 17px; height: 17px; fill: currentColor; }
+
+      @media (max-width: 520px) {
+        header { align-items: flex-start; flex-direction: column; }
+        main { padding-top: 34px; }
+        footer { align-items: flex-start; flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <p class="repository"><span>alv2017 /</span> playwright-tests-demo</p>
+        <a class="github-link" href="https://github.com/alv2017/playwright-tests-demo">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.7 7.7 0 0 1 8 4.8c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 8 0Z" /></svg>
+          View on GitHub
+        </a>
+      </header>
+
+      <main>
+        <h1>Playwright Tests Demo</h1>
+        <p class="description">
+            A practical demo that shows how to set up an end-to-end testing project with Playwright.
+        </p>
+
+        <h2>Topics Covered:</h2>
+
+        <ul class="topics">
+          <li>Installing Playwright and starting a new testing project</li>
+          <li>Writing tests with Playwright</li>
+          <li>Running Playwright tests</li>
+          <li>Setting up a CI/CD pipeline with GitHub Actions</li>
+        </ul>
+
+        <h2>Application Under Test:</h2>
+        <div class="note">
+          <p>We will write automated tests for the <a href="https://www.saucedemo.com/">SauceDemo website</a>.</p>
+        </div>
+        <p><code>SauceDemo</code> is a demo e-commerce web application developed by <code>Sauce Labs</code>, a company specializing in software testing. Its main purpose is to help QA engineers, developers, and students practice manual and automated testing in a controlled environment.</p>
+      </main>
+
+      <footer>
+        <span class="attribution"><span class="heart" aria-hidden="true">♥</span> generated for alv2017 by <a href="https://openai.com/codex/">Codex</a> <span class="heart" aria-label="with care">♥</span></span>
+        <a class="footer-repo" href="https://github.com/alv2017/playwright-tests-demo">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.7 7.7 0 0 1 8 4.8c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 8 0Z" /></svg>
+          github.com/alv2017/playwright-tests-demo
+        </a>
+      </footer>
+    </div>
+  </body>
+</html>

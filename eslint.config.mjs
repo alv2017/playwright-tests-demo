@@ -6,9 +6,11 @@ export default tseslint.config(
     {
         ignores: [
             ".github/",
-            "node_modules/", 
-            "playwright-report/", 
-            "test-results/"],
+            "node_modules/",
+            "playwright-report/",
+            "test-results/",
+            "README.md",
+        ],
     },
     js.configs.recommended,
     ...tseslint.configs.recommended,

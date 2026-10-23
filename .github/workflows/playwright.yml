@@ -117,3 +117,31 @@ jobs:
                   publish_branch: gh-pages
                   destination_dir: ${{ steps.report.outputs.path }}
                   keep_files: true
+
+            - name: Generate latest report metadata
+              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+              env:
+                  SHA: ${{ github.sha }}
+                  REPORT_URL: ${{ steps.report.outputs.url }}
+              run: |
+                  mkdir -p latest-metadata
+
+                  jq -n \
+                  --arg sha "$SHA" \
+                  --arg url "$REPORT_URL" \
+                  --arg publishedAt "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+                  '{
+                      sha: $sha,
+                      reportUrl: $url,
+                      publishedAt: $publishedAt
+                  }' > latest-metadata/latest.json
+
+            - name: Publish latest report metadata
+              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+              uses: peaceiris/actions-gh-pages@v4
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./latest-metadata
+                  publish_branch: gh-pages
+                  destination_dir: reports
+                  keep_files: true

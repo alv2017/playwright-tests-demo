@@ -39,9 +39,10 @@
         border-bottom: 1px solid var(--border);
       }
 
-      .repository { margin: 0; font-size: 0.95rem; font-weight: 600; }
-      .repository span { color: var(--muted); font-weight: 400; }
-      .test-result { margin: 0; font-size: 0.95rem; font-weight: 600; }
+      .repository { margin: 0; font-size: 0.9rem; font-weight: 600; }
+      .repository span, .test-result span { color: var(--muted); font-weight: 400; }
+      .test-result { margin: 0; font-size: 0.9rem; }
+  
       a { color: var(--link); text-decoration: none; color: #8de8f5}
       a:hover { text-decoration: underline; cursor: pointer;}
 
@@ -99,8 +100,9 @@
 
         <div class="header-item">
           <p class="test-result">
+            <span>Latest Test Results: </span>
             <a id="latest-test-report" href="reports/" aria-live="polite" target="_blank">
-              Latest Test Results: <time id="latest-test-date">Loading…</time>
+               <time id="latest-test-date">Loading…</time>
             </a>
           </p>
         </div>
@@ -148,7 +150,7 @@
 
           const latestReport = await response.json();
           const publishedAt = new Date(latestReport.publishedAt);
-          if (!latestReport.reportUrl || Number.isNaN(publishedAt.getTime())) {
+          if (!latestReport.reportUrl || !latestReport.sha || Number.isNaN(publishedAt.getTime())) {
             throw new Error("The latest report metadata is incomplete");
           }
 

@@ -27,7 +27,9 @@ test.describe("Inventory Page Structure", () => {
         await expect(cartLink).toBeVisible();
     });
 
-    test("Check: the number of products is greater that 0", async ({ page }) => {
+    test("Check: the number of products is greater that 0", async ({
+        page,
+    }) => {
         const productList = page.locator(".inventory_list");
         const products = productList.locator(".inventory_item");
 
@@ -199,7 +201,8 @@ test.describe("Adding (Removing) Products To (From) Cart", () => {
         }
     });
 
-    for (const n of [2, 3, 6]) { // parametrized test
+    for (const n of [2, 3, 6]) {
+        // parametrized test
         test(`Add multiple products to cart: n=${n} products`, async ({
             page,
         }) => {
@@ -244,18 +247,17 @@ test.describe("Adding (Removing) Products To (From) Cart", () => {
 });
 
 test.describe("Product Sorting Order on the Page", () => {
-    test(
-        "Check: default sorting order: products are sorted by name (A to Z)", 
-        async ({ page }) => {
-            const defaultOrderingOption = "Name (A to Z)";
-            const productSortContainer = page.locator(".select_container");
-            const actualOrdering =
-                productSortContainer.getByTestId("active-option");
+    test("Check: default sorting order: products are sorted by name (A to Z)", async ({
+        page,
+    }) => {
+        const defaultOrderingOption = "Name (A to Z)";
+        const productSortContainer = page.locator(".select_container");
+        const actualOrdering =
+            productSortContainer.getByTestId("active-option");
 
-            await expect(productSortContainer).toBeVisible();
-            await expect(actualOrdering).toHaveText(defaultOrderingOption);
-        },
-    );
+        await expect(productSortContainer).toBeVisible();
+        await expect(actualOrdering).toHaveText(defaultOrderingOption);
+    });
 
     test("Check: sort products by name (A to Z)", async ({ page }) => {
         const orderingOption = "Name (A to Z)";

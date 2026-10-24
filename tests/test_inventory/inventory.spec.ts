@@ -11,23 +11,25 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe("Inventory Page Structure", () => {
-    test("Check inventory page title", async ({ page }) => {
+    test("Check: inventory page title to be Swag Labs", async ({ page }) => {
         await expect(page).toHaveTitle("Swag Labs");
     });
 
-    test("Check secondary page header to be Products", async ({ page }) => {
+    test("Check: secondary page header to be Products", async ({ page }) => {
         const secondaryHeader = page
             .getByTestId("secondary-header")
             .getByTestId("title");
         await expect(secondaryHeader).toHaveText("Products");
     });
 
-    test("Check shopping cart link is visible", async ({ page }) => {
+    test("Check: shopping cart link is visible", async ({ page }) => {
         const cartLink = page.getByRole("button", { name: "Cart, empty" });
         await expect(cartLink).toBeVisible();
     });
 
-    test("Check the number of products is greater that 0", async ({ page }) => {
+    test("Check: the number of products is greater that 0", async ({
+        page,
+    }) => {
         const productList = page.locator(".inventory_list");
         const products = productList.locator(".inventory_item");
 
@@ -78,7 +80,7 @@ test.describe("Product Item Structure", () => {
         await expect(addToCartButton).toBeVisible();
     });
 
-    test("Check product attributes of every product in the list", async ({
+    test("Check product attributes: all product in the list", async ({
         page,
     }) => {
         const products = page.locator(".inventory_item");
@@ -121,12 +123,12 @@ test.describe("Product Item Structure", () => {
 });
 
 test.describe("Adding (Removing) Products To (From) Cart", () => {
-    test("Check initially cart is empty", async ({ page }) => {
+    test("Check: initially cart is empty", async ({ page }) => {
         const cart = page.locator(".shopping_cart_link");
         await expect(cart).toHaveAttribute("aria-label", "Cart, empty");
     });
 
-    test("Check add/remove first product to cart", async ({ page }) => {
+    test("Check: add/remove first product to cart", async ({ page }) => {
         const cart = page.locator(".shopping_cart_link");
         const product = page.locator(".inventory_item").first();
         const addToCartButton = product.getByRole("button", {
@@ -152,7 +154,7 @@ test.describe("Adding (Removing) Products To (From) Cart", () => {
         await expect(cart).toHaveAttribute("aria-label", "Cart, empty");
     });
 
-    test("Check add/remove product to cart: execute for every product", async ({
+    test("Check: add/remove product to cart: verify every listed product", async ({
         page,
     }) => {
         const cart = page.locator(".shopping_cart_link");
@@ -200,6 +202,7 @@ test.describe("Adding (Removing) Products To (From) Cart", () => {
     });
 
     for (const n of [2, 3, 6]) {
+        // parametrized test
         test(`Add multiple products to cart: n=${n} products`, async ({
             page,
         }) => {
@@ -243,8 +246,10 @@ test.describe("Adding (Removing) Products To (From) Cart", () => {
     }
 });
 
-test.describe("Ordering Products on Page", () => {
-    test("Check default ordering is Name (A to Z)", async ({ page }) => {
+test.describe("Product Sorting Order on the Page", () => {
+    test("Check: default sorting order: products are sorted by name (A to Z)", async ({
+        page,
+    }) => {
         const defaultOrderingOption = "Name (A to Z)";
         const productSortContainer = page.locator(".select_container");
         const actualOrdering =
@@ -254,7 +259,7 @@ test.describe("Ordering Products on Page", () => {
         await expect(actualOrdering).toHaveText(defaultOrderingOption);
     });
 
-    test("Check: ordering Name (A to Z)", async ({ page }) => {
+    test("Check: sort products by name (A to Z)", async ({ page }) => {
         const orderingOption = "Name (A to Z)";
         const productSortContainer = page.locator(".select_container");
         const actualOrdering =
@@ -283,7 +288,7 @@ test.describe("Ordering Products on Page", () => {
         expect(actualNames).toEqual(expectedNames);
     });
 
-    test("Check: ordering Name (Z to A)", async ({ page }) => {
+    test("Check: sort products by name (Z to A)", async ({ page }) => {
         const orderingOption = "Name (Z to A)";
         const productSortContainer = page.locator(".select_container");
         const actualOrdering =
@@ -313,7 +318,7 @@ test.describe("Ordering Products on Page", () => {
         expect(actualNames).toEqual(expectedNames);
     });
 
-    test("Check: ordering Price (low to high)", async ({ page }) => {
+    test("Check: sort products by price (low to high)", async ({ page }) => {
         const orderingOption = "Price (low to high)";
         const productSortContainer = page.locator(".select_container");
         const actualOrdering =
@@ -345,7 +350,7 @@ test.describe("Ordering Products on Page", () => {
         expect(actualPrices).toEqual(expectedPrices);
     });
 
-    test("Check: ordering Price (high to low)", async ({ page }) => {
+    test("Check: sort products by price (high to low)", async ({ page }) => {
         const orderingOption = "Price (high to low)";
         const productSortContainer = page.locator(".select_container");
         const actualOrdering =

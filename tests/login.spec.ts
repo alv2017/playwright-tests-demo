@@ -1,12 +1,11 @@
 import { test, expect } from "@playwright/test";
 
-const url = "https://www.saucedemo.com";
-
-const redirectURL = "https://www.saucedemo.com/inventory.html";
+const loginPath = "/";
+const redirectPath = "/inventory.html";
 
 test.beforeEach(async ({ page }) => {
-    await page.goto(url);
-    await expect(page).toHaveURL(url);
+    await page.goto(loginPath);
+    await expect(page).toHaveURL(loginPath);
 });
 
 test.describe("Login with no username", () => {
@@ -22,7 +21,7 @@ test.describe("Login with no username", () => {
 
         await expect(errorAlert).toBeVisible();
         await expect(errorAlert).toHaveText(/username is required$/i);
-        await expect(page).toHaveURL(url);
+        await expect(page).toHaveURL(loginPath);
     });
 
     test("Login without username and some random password", async ({
@@ -39,7 +38,7 @@ test.describe("Login with no username", () => {
 
         await expect(errorAlert).toBeVisible();
         await expect(errorAlert).toHaveText(/username is required$/i);
-        await expect(page).toHaveURL(url);
+        await expect(page).toHaveURL(loginPath);
     });
 });
 
@@ -52,7 +51,7 @@ test.describe("Login as a standard user", () => {
         await page.getByPlaceholder("Username").fill("standard_user");
         await page.getByPlaceholder("Password").fill("secret_sauce");
         await loginButton.click();
-        await expect(page).toHaveURL(redirectURL);
+        await expect(page).toHaveURL(redirectPath);
     });
 
     test("Login without a password", async ({ page }) => {
@@ -65,7 +64,7 @@ test.describe("Login as a standard user", () => {
         await loginButton.click();
         await expect(errorAlert).toBeVisible();
         await expect(errorAlert).toHaveText(/password is required/i);
-        await expect(page).toHaveURL(url);
+        await expect(page).toHaveURL(loginPath);
     });
 
     test("Login with invalid password", async ({ page }) => {
@@ -81,7 +80,7 @@ test.describe("Login as a standard user", () => {
         await expect(errorAlert).toHaveText(
             /username and password do not match/i,
         );
-        await expect(page).toHaveURL(url);
+        await expect(page).toHaveURL(loginPath);
     });
 });
 
@@ -98,7 +97,7 @@ test.describe("Login as locked out user", () => {
 
         await expect(errorAlert).toBeVisible();
         await expect(errorAlert).toHaveText(/this user has been locked out/i);
-        await expect(page).toHaveURL(url);
+        await expect(page).toHaveURL(loginPath);
     });
 
     test("Login with no password", async ({ page }) => {
@@ -113,7 +112,7 @@ test.describe("Login as locked out user", () => {
 
         await expect(errorAlert).toBeVisible();
         await expect(errorAlert).toHaveText(/password is required$/i);
-        await expect(page).toHaveURL(url);
+        await expect(page).toHaveURL(loginPath);
     });
 
     test("Login with invalid password", async ({ page }) => {
@@ -130,6 +129,6 @@ test.describe("Login as locked out user", () => {
         await expect(errorAlert).toHaveText(
             /username and password do not match/i,
         );
-        await expect(page).toHaveURL(url);
+        await expect(page).toHaveURL(loginPath);
     });
 });

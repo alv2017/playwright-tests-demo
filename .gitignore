@@ -9,3 +9,11 @@ node_modules/
 
 # Custom
 PRIVATE-README.md
+
+# dotenv
+.env
+.env.*
+!.env.example
+
+# playwright authentication
+playright/.auth

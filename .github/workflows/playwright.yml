@@ -21,14 +21,18 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v7
+
             - name: Set Up Node.js
               uses: actions/setup-node@v7
               with:
                   node-version: lts/*
+
             - name: Install dependencies - clean install
               run: npm ci
+
             - name: Run ESLint
               run: npm run lint
+
             - name: Check formatting
               run: npm run format:check
 
@@ -42,16 +46,26 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v7
+
             - name: Set Up Node.js
               uses: actions/setup-node@v7
               with:
                   node-version: lts/*
+
             - name: Install dependencies - clean install
               run: npm ci
+
             - name: Install Playwright Browsers
               run: npx playwright install --with-deps
+
             - name: Run Playwright tests
+              env:
+                  STANDARD_USER: ${{ secrets.STANDARD_USER }}
+                  STANDARD_PASSWORD: ${{ secrets.STANDARD_PASSWORD }}
+                  LOCKED_OUT_USER: ${{ secrets.LOCKED_OUT_USER }}
+                  LOCKED_OUT_PASSWORD: ${{ secrets.LOCKED_OUT_PASSWORD }}
               run: npx playwright test tests/
+
             - name: Save Playwright report to artifacts
               id: upload-report
               uses: actions/upload-artifact@v6

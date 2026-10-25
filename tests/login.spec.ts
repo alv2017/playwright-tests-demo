@@ -1,4 +1,10 @@
 import { test, expect } from "@playwright/test";
+import {
+    standardUser,
+    standardPassword,
+    lockedOutUser,
+    lockedOutPassword,
+} from "../config/credentials";
 
 const loginPath = "/";
 const redirectPath = "/inventory.html";
@@ -48,8 +54,8 @@ test.describe("Login as a standard user", () => {
             name: "Login",
             exact: true,
         });
-        await page.getByPlaceholder("Username").fill("standard_user");
-        await page.getByPlaceholder("Password").fill("secret_sauce");
+        await page.getByPlaceholder("Username").fill(standardUser);
+        await page.getByPlaceholder("Password").fill(standardPassword);
         await loginButton.click();
         await expect(page).toHaveURL(redirectPath);
     });
@@ -60,7 +66,7 @@ test.describe("Login as a standard user", () => {
             exact: true,
         });
         const errorAlert = page.getByRole("alert");
-        await page.getByPlaceholder("Username").fill("standard_user");
+        await page.getByPlaceholder("Username").fill(standardUser);
         await loginButton.click();
         await expect(errorAlert).toBeVisible();
         await expect(errorAlert).toHaveText(/password is required/i);
@@ -73,7 +79,7 @@ test.describe("Login as a standard user", () => {
             exact: true,
         });
         const errorAlert = page.getByRole("alert");
-        await page.getByPlaceholder("Username").fill("standard_user");
+        await page.getByPlaceholder("Username").fill(standardUser);
         await page.getByPlaceholder("Password").fill("invalid-password");
         await loginButton.click();
         await expect(errorAlert).toBeVisible();
@@ -91,8 +97,8 @@ test.describe("Login as locked out user", () => {
             exact: true,
         });
         const errorAlert = page.getByRole("alert");
-        await page.getByPlaceholder("Username").fill("locked_out_user");
-        await page.getByPlaceholder("Password").fill("secret_sauce");
+        await page.getByPlaceholder("Username").fill(lockedOutUser);
+        await page.getByPlaceholder("Password").fill(lockedOutPassword);
         await loginButton.click();
 
         await expect(errorAlert).toBeVisible();
@@ -106,7 +112,7 @@ test.describe("Login as locked out user", () => {
             exact: true,
         });
         const errorAlert = page.getByRole("alert");
-        await page.getByPlaceholder("Username").fill("locked_out_user");
+        await page.getByPlaceholder("Username").fill(lockedOutUser);
         await page.getByPlaceholder("Password").fill("");
         await loginButton.click();
 
@@ -121,7 +127,7 @@ test.describe("Login as locked out user", () => {
             exact: true,
         });
         const errorAlert = page.getByRole("alert");
-        await page.getByPlaceholder("Username").fill("locked_out_user");
+        await page.getByPlaceholder("Username").fill(lockedOutUser);
         await page.getByPlaceholder("Password").fill("invalid-password");
         await loginButton.click();
 

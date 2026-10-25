@@ -1,9 +1,5 @@
 import { test, expect } from "@playwright/test";
-import {
-    standardUser,
-    standardPassword,
-} from "../../config/credentials";
-
+import { standardUser, standardPassword } from "../../config/credentials";
 
 const loginPath = "/";
 const inventoryPath = "/inventory.html";

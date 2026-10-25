@@ -1,11 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { 
+import {
     standardUser,
     standardPassword,
     lockedOutUser,
     lockedOutPassword,
 } from "../config/credentials";
-
 
 const loginPath = "/";
 const redirectPath = "/inventory.html";

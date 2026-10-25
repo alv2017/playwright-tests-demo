@@ -1,6 +1,6 @@
 function getEnv(name: string): string {
     return process.env[name] || "UNDEFINED";
-};
+}
 
 export const standardUser = getEnv("STANDARD_USER");
 export const standardPassword = getEnv("STANDARD_PASSWORD");

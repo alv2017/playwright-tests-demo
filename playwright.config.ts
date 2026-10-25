@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const projectBaseURL = "https://saucedemo.com";
+const projectBaseURL = "https://www.saucedemo.com";
 
 /**
  * Read environment variables from file.

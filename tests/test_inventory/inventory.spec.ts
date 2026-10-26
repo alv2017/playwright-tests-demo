@@ -1,12 +1,13 @@
 import { test, expect } from "@playwright/test";
+import { standardUser, standardPassword } from "../../config/credentials";
 
 const loginPath = "/";
 const inventoryPath = "/inventory.html";
 
 test.beforeEach(async ({ page }) => {
     await page.goto(loginPath);
-    await page.getByPlaceholder("Username").fill("standard_user");
-    await page.getByPlaceholder("Password").fill("secret_sauce");
+    await page.getByPlaceholder("Username").fill(standardUser);
+    await page.getByPlaceholder("Password").fill(standardPassword);
     await page.getByRole("button", { name: "Login" }).click();
     await expect(page).toHaveURL(inventoryPath);
 });

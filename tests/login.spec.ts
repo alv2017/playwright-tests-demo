@@ -83,7 +83,7 @@ test.describe("Login as a standard user", () => {
         });
         const errorAlert = page.getByRole("alert");
         await page.getByPlaceholder("Username").fill(standardUser);
-        await page.getByPlaceholder("Password").fill(standardPassword);
+        await page.getByPlaceholder("Password").fill("");
         await loginButton.click();
 
         await expect(

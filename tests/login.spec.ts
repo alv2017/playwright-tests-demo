@@ -6,7 +6,6 @@ import {
     lockedOutPassword,
 } from "../config/credentials";
 
-
 const loginPath = "/";
 const redirectPath = "/inventory.html";
 
@@ -28,12 +27,12 @@ test.describe("Login with no username", () => {
         await loginButton.click();
 
         await expect(
-            errorAlert, 
+            errorAlert,
             "Login must fail. Error message must be displayed",
         ).toBeVisible();
         await expect(errorAlert).toHaveText(/username is required$/i);
         await expect(
-            page, 
+            page,
             "On a failed login attempt, the user must remain on the login page",
         ).toHaveURL(loginPath);
     });
@@ -51,7 +50,7 @@ test.describe("Login with no username", () => {
         await loginButton.click();
 
         await expect(
-            errorAlert, 
+            errorAlert,
             "Login must fail. Error message must be displayed",
         ).toBeVisible();
         await expect(errorAlert).toHaveText(/username is required$/i);
@@ -88,7 +87,7 @@ test.describe("Login as a standard user", () => {
         await loginButton.click();
 
         await expect(
-            errorAlert, 
+            errorAlert,
             "Login must fail. Error message must be displayed",
         ).toBeVisible();
         await expect(errorAlert).toHaveText(/password is required/i);
@@ -108,7 +107,7 @@ test.describe("Login as a standard user", () => {
         await page.getByPlaceholder("Password").fill("invalid-password");
         await loginButton.click();
         await expect(
-            errorAlert, 
+            errorAlert,
             "Login must fail. Error message must be displayed",
         ).toBeVisible();
         await expect(errorAlert).toHaveText(
@@ -133,7 +132,7 @@ test.describe("Login as locked out user", () => {
         await loginButton.click();
 
         await expect(
-            errorAlert, 
+            errorAlert,
             "Login must fail. Error message must be displayed",
         ).toBeVisible();
         await expect(errorAlert).toHaveText(/this user has been locked out/i);
@@ -154,7 +153,7 @@ test.describe("Login as locked out user", () => {
         await loginButton.click();
 
         await expect(
-            errorAlert, 
+            errorAlert,
             "Login must fail. Error message must be displayed",
         ).toBeVisible();
         await expect(errorAlert).toHaveText(/password is required$/i);
@@ -175,7 +174,7 @@ test.describe("Login as locked out user", () => {
         await loginButton.click();
 
         await expect(
-            errorAlert, 
+            errorAlert,
             "Login must fail. Error message must be displayed",
         ).toBeVisible();
         await expect(errorAlert).toHaveText(

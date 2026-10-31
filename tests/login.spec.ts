@@ -1,4 +1,4 @@
-import { test, expect } from "../fixtures/login.page.fixture";
+import { test, expect } from "../fixtures/fixtures.registry";
 import { LoginPage } from "../pages/LoginPage";
 import {
     standardUser,

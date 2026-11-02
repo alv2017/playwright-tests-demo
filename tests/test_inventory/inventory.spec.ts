@@ -1,19 +1,12 @@
-import { test, expect } from "@playwright/test";
-import { standardUser, standardPassword } from "../../config/credentials";
+import { test, expect } from "../../fixtures/fixtures.registry";
+import { InventoryPage } from "../../pages/InventoryPage";
 
-const loginPath = "/";
-const inventoryPath = "/inventory.html";
-
-test.beforeEach(async ({ page }) => {
-    await page.goto(loginPath);
-    await page.getByPlaceholder("Username").fill(standardUser);
-    await page.getByPlaceholder("Password").fill(standardPassword);
-    await page.getByRole("button", { name: "Login" }).click();
-    await expect(page).toHaveURL(inventoryPath);
-});
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+test.beforeEach(async ({ inventoryPage }) => {});
 
 test.describe("Inventory Page Structure", () => {
     test("Check: inventory page title to be Swag Labs", async ({ page }) => {
+        await expect(page).toHaveURL(InventoryPage.url);
         await expect(page).toHaveTitle("Swag Labs");
     });
 

@@ -1,4 +1,5 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../fixtures/fixtures.registry";
+import { LoginPage } from "../pages/LoginPage";
 import {
     standardUser,
     standardPassword,
@@ -6,48 +7,34 @@ import {
     lockedOutPassword,
 } from "../config/credentials";
 
-const loginPath = "/";
-const redirectPath = "/inventory.html";
-
-test.beforeEach(async ({ page }) => {
-    await page.goto(loginPath);
-    await expect(page).toHaveURL(loginPath);
-});
-
 test.describe("Login with no username", () => {
-    test("Login without username and password", async ({ page }) => {
-        const loginButton = page.getByRole("button", {
-            name: "Login",
-            exact: true,
-        });
-        const errorAlert = page.getByRole("alert");
-
-        await page.getByPlaceholder("Username").fill("");
-        await page.getByPlaceholder("Password").fill("");
-        await loginButton.click();
+    test("Login without username and password", async ({ loginPage, page }) => {
+        const username = "";
+        const password = "";
+        const errorAlert = loginPage.getErrorAlert();
+        await loginPage.login(username, password);
 
         await expect(
             errorAlert,
             "Login must fail. Error message must be displayed",
         ).toBeVisible();
+
         await expect(errorAlert).toHaveText(/username is required$/i);
+
         await expect(
             page,
             "On a failed login attempt, the user must remain on the login page",
-        ).toHaveURL(loginPath);
+        ).toHaveURL(LoginPage.url);
     });
 
     test("Login without username and some random password", async ({
+        loginPage,
         page,
     }) => {
-        const loginButton = page.getByRole("button", {
-            name: "Login",
-            exact: true,
-        });
-        const errorAlert = page.getByRole("alert");
-        await page.getByPlaceholder("Username").fill("");
-        await page.getByPlaceholder("Password").fill("some-random-password");
-        await loginButton.click();
+        const username = "";
+        const password = "some-random-password";
+        const errorAlert = loginPage.getErrorAlert();
+        await loginPage.login(username, password);
 
         await expect(
             errorAlert,
@@ -57,79 +44,68 @@ test.describe("Login with no username", () => {
         await expect(
             page,
             "On a failed login attempt, the user must remain on the login page",
-        ).toHaveURL(loginPath);
+        ).toHaveURL(LoginPage.url);
     });
 });
 
 test.describe("Login as a standard user", () => {
-    test("Login with valid credentials", async ({ page }) => {
-        const loginButton = page.getByRole("button", {
-            name: "Login",
-            exact: true,
-        });
-        await page.getByPlaceholder("Username").fill(standardUser);
-        await page.getByPlaceholder("Password").fill(standardPassword);
-        await loginButton.click();
+    test("Login with valid credentials", async ({ loginPage, page }) => {
+        const username = standardUser;
+        const password = standardPassword;
+        await loginPage.login(username, password);
+
         await expect(
             page,
             "Successful login attempt: the user is redirected to the inventory page",
-        ).toHaveURL(redirectPath);
+        ).toHaveURL(LoginPage.successfulRedirectURL);
     });
 
-    test("Login without a password", async ({ page }) => {
-        const loginButton = page.getByRole("button", {
-            name: "Login",
-            exact: true,
-        });
-        const errorAlert = page.getByRole("alert");
-        await page.getByPlaceholder("Username").fill(standardUser);
-        await page.getByPlaceholder("Password").fill("");
-        await loginButton.click();
+    test("Login without a password", async ({ loginPage, page }) => {
+        const username = "some-username";
+        const password = "";
+        const errorAlert = loginPage.getErrorAlert();
+        await loginPage.login(username, password);
 
         await expect(
             errorAlert,
             "Login must fail. Error message must be displayed",
         ).toBeVisible();
+
         await expect(errorAlert).toHaveText(/password is required/i);
+
         await expect(
             page,
             "On a failed login attempt, the user must remain on the login page",
-        ).toHaveURL(loginPath);
+        ).toHaveURL(LoginPage.url);
     });
 
-    test("Login with invalid password", async ({ page }) => {
-        const loginButton = page.getByRole("button", {
-            name: "Login",
-            exact: true,
-        });
-        const errorAlert = page.getByRole("alert");
-        await page.getByPlaceholder("Username").fill(standardUser);
-        await page.getByPlaceholder("Password").fill("invalid-password");
-        await loginButton.click();
+    test("Login with invalid password", async ({ loginPage, page }) => {
+        const username = standardUser;
+        const password = "some-random-password";
+        const errorAlert = loginPage.getErrorAlert();
+        await loginPage.login(username, password);
+
         await expect(
             errorAlert,
             "Login must fail. Error message must be displayed",
         ).toBeVisible();
+
         await expect(errorAlert).toHaveText(
             /username and password do not match/i,
         );
         await expect(
             page,
             "On a failed login attempt, the user must remain on the login page",
-        ).toHaveURL(loginPath);
+        ).toHaveURL(LoginPage.url);
     });
 });
 
 test.describe("Login as locked out user", () => {
-    test("Login using valid credentials", async ({ page }) => {
-        const loginButton = page.getByRole("button", {
-            name: "Login",
-            exact: true,
-        });
-        const errorAlert = page.getByRole("alert");
-        await page.getByPlaceholder("Username").fill(lockedOutUser);
-        await page.getByPlaceholder("Password").fill(lockedOutPassword);
-        await loginButton.click();
+    test("Login using valid credentials", async ({ loginPage, page }) => {
+        const username = lockedOutUser;
+        const password = lockedOutPassword;
+        const errorAlert = loginPage.getErrorAlert();
+        await loginPage.login(username, password);
 
         await expect(
             errorAlert,
@@ -139,18 +115,14 @@ test.describe("Login as locked out user", () => {
         await expect(
             page,
             "A locked-out user's login always fails, so the user remains on the login page",
-        ).toHaveURL(loginPath);
+        ).toHaveURL(LoginPage.url);
     });
 
-    test("Login with no password", async ({ page }) => {
-        const loginButton = page.getByRole("button", {
-            name: "Login",
-            exact: true,
-        });
-        const errorAlert = page.getByRole("alert");
-        await page.getByPlaceholder("Username").fill(lockedOutUser);
-        await page.getByPlaceholder("Password").fill("");
-        await loginButton.click();
+    test("Login with no password", async ({ loginPage, page }) => {
+        const username = lockedOutUser;
+        const password = "";
+        const errorAlert = loginPage.getErrorAlert();
+        await loginPage.login(username, password);
 
         await expect(
             errorAlert,
@@ -160,18 +132,14 @@ test.describe("Login as locked out user", () => {
         await expect(
             page,
             "A locked-out user's login always fails, so the user remains on the login page",
-        ).toHaveURL(loginPath);
+        ).toHaveURL(LoginPage.url);
     });
 
-    test("Login with invalid password", async ({ page }) => {
-        const loginButton = page.getByRole("button", {
-            name: "Login",
-            exact: true,
-        });
-        const errorAlert = page.getByRole("alert");
-        await page.getByPlaceholder("Username").fill(lockedOutUser);
-        await page.getByPlaceholder("Password").fill("invalid-password");
-        await loginButton.click();
+    test("Login with invalid password", async ({ loginPage, page }) => {
+        const username = lockedOutUser;
+        const password = "invalid-password";
+        const errorAlert = loginPage.getErrorAlert();
+        await loginPage.login(username, password);
 
         await expect(
             errorAlert,
@@ -183,6 +151,6 @@ test.describe("Login as locked out user", () => {
         await expect(
             page,
             "A locked-out user's login always fails, so the user remains on the login page",
-        ).toHaveURL(loginPath);
+        ).toHaveURL(LoginPage.url);
     });
 });

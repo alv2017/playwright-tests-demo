@@ -5,7 +5,9 @@ const loginPath = "/";
 const inventoryPath = "/inventory.html";
 
 test.describe("Inventory page requires authentication", () => {
-    test("Check: unauthenticated access fails", async ({ page }) => {
+    test("Check: unauthenticated access to inventory page fails", async ({
+        page,
+    }) => {
         await page.goto(inventoryPath);
         await expect(page).toHaveURL(loginPath);
         await expect(page.getByRole("alert")).toContainText(
@@ -13,12 +15,14 @@ test.describe("Inventory page requires authentication", () => {
         );
     });
 
-    test("Check: authenticated access succeeds", async ({ page }) => {
+    test("Check: after successful login user is redirected to inventory page", async ({
+        page,
+    }) => {
         await page.goto(loginPath);
         await page.getByPlaceholder("Username").fill(standardUser);
         await page.getByPlaceholder("Password").fill(standardPassword);
         await page.getByRole("button", { name: "Login" }).click();
-        // after successful login user redirected to inventory page
+
         await expect(page).toHaveURL(inventoryPath);
     });
 });

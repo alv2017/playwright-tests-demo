@@ -1,4 +1,4 @@
-import { Page, Locator } from "@playwright/test";
+import { expect, Page, Locator } from "@playwright/test";
 import { LoginPage } from "./LoginPage";
 
 import { standardUser, standardPassword } from "../config/credentials";
@@ -34,6 +34,10 @@ export class InventoryPage extends InventoryPageBase {
 
     locateShoppingCartButton(): Locator {
         return this.page.getByTestId("shopping-cart-link");
+    }
+
+    locateShoppingCartBadge(): Locator {
+        return this.page.getByTestId("shopping-cart-badge");
     }
 
     locateProductContainer(): Locator {
@@ -92,5 +96,41 @@ export class InventoryPage extends InventoryPageBase {
 
     locateProductOrderOptionSelector() {
         return this.page.locator(".select_container").locator("select");
+    }
+
+    async addProductToCart(): Promise<void> {
+        const availableProducts = this.locateProductItems().filter({
+            has: this.page.getByRole("button", { name: /^add to cart$/i }),
+        });
+
+        const product = availableProducts.first();
+        const productAddToCartButton =
+            this.locateProductAddToCartButton(product);
+
+        try {
+            await expect(product).toHaveCount(1);
+            await expect(productAddToCartButton).toBeVisible();
+        } catch (error) {
+            throw new Error("Unable to add the product", { cause: error });
+        }
+
+        await productAddToCartButton.click();
+    }
+
+    async getNumberOfProductsOnCartBadge(): Promise<string> {
+        const shoppingCartBadge = this.locateShoppingCartBadge();
+        if ((await shoppingCartBadge.count()) === 0) {
+            return "0";
+        }
+
+        const badgeNumberString = await shoppingCartBadge.textContent();
+
+        if (!badgeNumberString?.trim()) {
+            throw new Error(
+                "Unable to read the number of products from the badge",
+            );
+        }
+
+        return badgeNumberString.trim();
     }
 }

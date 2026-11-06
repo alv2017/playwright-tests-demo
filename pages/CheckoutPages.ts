@@ -1,7 +1,7 @@
-import { Page } from "@playwright/test";
+import { Page, Locator } from "@playwright/test";
 import { ShoppingCartPage } from "./ShoppingCartPage";
 
-class CheckoutBaseStepOnePage {
+export class CheckoutBaseStepOnePage {
     protected readonly page: Page;
 
     static readonly url: string = "/checkout-step-one.html";
@@ -30,4 +30,35 @@ class CheckoutBaseStepOnePage {
     }
 }
 
-export class CheckoutStepOnePage extends CheckoutBaseStepOnePage {}
+export class CheckoutStepOnePage extends CheckoutBaseStepOnePage {
+    locateSecondaryHeader(): Locator {
+        return this.page.getByTestId("secondary-header").getByTestId("title");
+    }
+
+    locateCheckoutForm(): Locator {
+        return this.page.getByRole("form", {
+            name: "Checkout information",
+            exact: true,
+        });
+    }
+
+    locateFirstNameInput(): Locator {
+        return this.page.getByPlaceholder("First Name", { exact: true });
+    }
+
+    locateLastNameInput(): Locator {
+        return this.page.getByPlaceholder("Last Name", { exact: true });
+    }
+
+    locateZipCodeInput(): Locator {
+        return this.page.getByPlaceholder("Zip/Postal Code", { exact: true });
+    }
+
+    locateCancelButton(): Locator {
+        return this.page.getByRole("button", { name: "Cancel", exact: true });
+    }
+
+    locateContinueButton(): Locator {
+        return this.page.getByRole("button", { name: "Continue", exact: true });
+    }
+}

@@ -1,20 +1,15 @@
 import { Page } from "@playwright/test";
 import { ShoppingCartPage } from "./ShoppingCartPage";
+import { BasePage } from "./BasePage";
 
-class CheckoutBaseStepOnePage {
-    protected readonly page: Page;
-
+class CheckoutBaseStepOnePage extends BasePage {
     static readonly url: string = "/checkout-step-one.html";
     static readonly maxNumberOfProductsInCart: number = 6;
     numberOfProducts: number;
 
     constructor(page: Page, numberOfProducts: number) {
-        this.page = page;
+        super(page);
         this.numberOfProducts = numberOfProducts;
-    }
-
-    getPlaywrightPage(): Page {
-        return this.page;
     }
 
     get url(): string {

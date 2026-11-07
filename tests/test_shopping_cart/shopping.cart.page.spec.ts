@@ -15,7 +15,7 @@ test.describe("Shopping Cart Page Structure", () => {
             }) => {
                 await test.step("Check: page header is 'Your Cart'", async () => {
                     const secondaryHeader =
-                        shoppingCartPage.locateSecondaryHeader();
+                        shoppingCartPage.pageHeader.locateSecondaryHeader();
 
                     await expect(secondaryHeader).toHaveText("Your Cart");
                 });

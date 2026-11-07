@@ -1,15 +1,15 @@
 import { Page, Locator } from "@playwright/test";
 import { InventoryPage } from "./InventoryPage";
+import { BasePage } from "./BasePage";
 
-class ShoppingCartPageBase {
-    protected readonly page: Page;
-
+class ShoppingCartPageBase extends BasePage {
     static readonly url: string = "/cart.html";
     static readonly maxNumberOfProductsInCart: number = 6;
     numberOfProducts: number;
 
     constructor(page: Page, numberOfProducts: number = 0) {
-        this.page = page;
+        super(page);
+
         if (numberOfProducts < 0) {
             throw new Error(
                 "The number of products in the cart must be greater than 0",
@@ -31,10 +31,6 @@ class ShoppingCartPageBase {
         this.numberOfProducts = numberOfProducts;
     }
 
-    getPlaywrightPage(): Page {
-        return this.page;
-    }
-
     get url(): string {
         return ShoppingCartPageBase.url;
     }
@@ -54,15 +50,11 @@ class ShoppingCartPageBase {
             }
         }
 
-        await inventoryPage.locateShoppingCartButton().click();
+        await inventoryPage.pageHeader.locateShoppingCartButton().click();
     }
 }
 
 export class ShoppingCartPage extends ShoppingCartPageBase {
-    locateSecondaryHeader(): Locator {
-        return this.page.getByTestId("secondary-header").getByTestId("title");
-    }
-
     locateContinueShoppingButton(): Locator {
         return this.page.getByRole("button", { name: "Continue Shopping" });
     }

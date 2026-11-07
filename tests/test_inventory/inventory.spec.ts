@@ -10,12 +10,13 @@ test.describe("Inventory Page Structure", () => {
     });
 
     test("Check: page header is Products", async ({ inventoryPage }) => {
-        const secondaryHeader = inventoryPage.locateSecondaryHeader();
+        const secondaryHeader =
+            inventoryPage.pageHeader.locateSecondaryHeader();
         await expect(secondaryHeader).toHaveText("Products");
     });
 
     test("Check: shopping cart link is visible", async ({ inventoryPage }) => {
-        const cartLink = inventoryPage.locateShoppingCartButton();
+        const cartLink = inventoryPage.pageHeader.locateShoppingCartButton();
         await expect(cartLink).toBeVisible();
     });
 
@@ -105,14 +106,14 @@ test.describe("Product Item Structure", () => {
 
 test.describe("Adding (Removing) Products To (From) Cart", () => {
     test("Check: initially cart is empty", async ({ inventoryPage }) => {
-        const cart = inventoryPage.locateShoppingCartButton();
+        const cart = inventoryPage.pageHeader.locateShoppingCartButton();
         await expect(cart).toHaveAccessibleName("Cart, empty");
     });
 
     test("Check: add/remove first product to/from cart", async ({
         inventoryPage,
     }) => {
-        const cart = inventoryPage.locateShoppingCartButton();
+        const cart = inventoryPage.pageHeader.locateShoppingCartButton();
         const product = inventoryPage.locateFirstProduct();
         const productAddToCartButton =
             inventoryPage.locateProductAddToCartButton(product);
@@ -142,7 +143,7 @@ test.describe("Adding (Removing) Products To (From) Cart", () => {
     }) => {
         let productCounter = 0;
         const numberOfProductsPerPage = 6;
-        const cart = inventoryPage.locateShoppingCartButton();
+        const cart = inventoryPage.pageHeader.locateShoppingCartButton();
         const products = inventoryPage.locateProductItems();
 
         await expect(products).toHaveCount(numberOfProductsPerPage);
@@ -181,7 +182,7 @@ test.describe("Adding (Removing) Products To (From) Cart", () => {
         test(`Add multiple products to cart: n=${n} products`, async ({
             inventoryPage,
         }) => {
-            const cart = inventoryPage.locateShoppingCartButton();
+            const cart = inventoryPage.pageHeader.locateShoppingCartButton();
             const products = inventoryPage.locateProductItems();
 
             // all products are visible

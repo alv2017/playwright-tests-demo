@@ -1,20 +1,11 @@
-import { expect, Page, Locator } from "@playwright/test";
+import { expect, Locator } from "@playwright/test";
 import { LoginPage } from "./LoginPage";
+import { BasePage } from "./BasePage";
 
 import { standardUser, standardPassword } from "../config/credentials";
 
-class InventoryPageBase {
-    protected readonly page: Page;
-
+class InventoryPageBase extends BasePage {
     static readonly url: string = "/inventory.html";
-
-    constructor(page: Page) {
-        this.page = page;
-    }
-
-    getPlaywrightPage(): Page {
-        return this.page;
-    }
 
     get url(): string {
         return InventoryPageBase.url;
@@ -28,18 +19,6 @@ class InventoryPageBase {
 }
 
 export class InventoryPage extends InventoryPageBase {
-    locateSecondaryHeader(): Locator {
-        return this.page.getByTestId("secondary-header").getByTestId("title");
-    }
-
-    locateShoppingCartButton(): Locator {
-        return this.page.getByTestId("shopping-cart-link");
-    }
-
-    locateShoppingCartBadge(): Locator {
-        return this.page.getByTestId("shopping-cart-badge");
-    }
-
     locateProductContainer(): Locator {
         return this.page.locator(".inventory_list");
     }
@@ -118,7 +97,7 @@ export class InventoryPage extends InventoryPageBase {
     }
 
     async getNumberOfProductsOnCartBadge(): Promise<string> {
-        const shoppingCartBadge = this.locateShoppingCartBadge();
+        const shoppingCartBadge = this.pageHeader.locateShoppingCartBadge();
         if ((await shoppingCartBadge.count()) === 0) {
             return "0";
         }

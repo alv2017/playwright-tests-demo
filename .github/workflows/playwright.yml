@@ -58,6 +58,12 @@ jobs:
             - name: Install Playwright Browsers
               run: npx playwright install --with-deps
 
+            - name: Check TypeScript code without generatin JavaScript
+              run: npx tsc --noEmit
+
+            - name: Validate Playwright tests
+              run: npx playwright test tests/ --list
+
             - name: Run Playwright tests
               id: playwright_tests
               continue-on-error: true

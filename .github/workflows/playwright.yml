@@ -66,7 +66,6 @@ jobs:
 
             - name: Run Playwright tests
               id: playwright_tests
-              continue-on-error: true
               env:
                   STANDARD_USER: ${{ secrets.STANDARD_USER }}
                   STANDARD_PASSWORD: ${{ secrets.STANDARD_PASSWORD }}
@@ -80,7 +79,6 @@ jobs:
                   echo "::warning title=One or more Playwright tests failed::"
                   echo "### ⚠️ Playwright tests failed ⚠️" >> "$GITHUB_STEP_SUMMARY"
                   echo "One or more e2e tests failed" >> "$GITHUB_STEP_SUMMARY"
-                  echo "For more details review the test report"
 
             - name: Save Playwright report to artifacts
               id: upload-report

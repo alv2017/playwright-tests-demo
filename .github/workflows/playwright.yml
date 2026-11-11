@@ -75,7 +75,7 @@ jobs:
               run: npx playwright test tests/
 
             - name: Warn if Playwright test failed
-              if: ${{ steps.playwright_tests.outcome == 'faulure' }}
+              if: ${{ steps.playwright_tests.outcome == 'failure' }}
               run: |
                   echo "::warning title=One or more Playwright tests failed::"
                   echo "### ⚠️ Playwright tests failed ⚠️" >> "$GITHUB_STEP_SUMMARY"

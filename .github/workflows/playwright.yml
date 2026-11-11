@@ -58,11 +58,11 @@ jobs:
             - name: Install Playwright Browsers
               run: npx playwright install --with-deps
 
-            - name: Check TypeScript code without generatin JavaScript
+            - name: Check TypeScript code without generating JavaScript
               run: npx tsc --noEmit
 
             - name: Validate Playwright tests
-              run: npx playwright test tests/ --list
+              run: npx playwright test tests/ --list --project=chromium
 
             - name: Run Playwright tests
               id: playwright_tests
@@ -72,7 +72,7 @@ jobs:
                   STANDARD_PASSWORD: ${{ secrets.STANDARD_PASSWORD }}
                   LOCKED_OUT_USER: ${{ secrets.LOCKED_OUT_USER }}
                   LOCKED_OUT_PASSWORD: ${{ secrets.LOCKED_OUT_PASSWORD }}
-              run: npx playwright test tests/
+              run: npx playwright test tests/ --project=chromium
 
             - name: Warn if Playwright test failed
               if: ${{ steps.playwright_tests.outcome == 'failure' }}

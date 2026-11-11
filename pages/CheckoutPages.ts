@@ -1,11 +1,8 @@
 import { Page, Locator } from "@playwright/test";
 import { ShoppingCartPage } from "./ShoppingCartPage";
 import { BasePage } from "./BasePage";
-import {
-    userFirstName,
-    userLastName,
-    userZipCode,
-} from "../config/credentials";
+
+import { userFirstName, userLastName, userZipCode } from "../config/test.data";
 
 class CheckoutBaseStepOnePage extends BasePage {
     static readonly url: string = "/checkout-step-one.html";

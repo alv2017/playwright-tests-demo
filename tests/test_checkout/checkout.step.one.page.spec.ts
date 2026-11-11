@@ -4,7 +4,7 @@ import {
     userFirstName,
     userLastName,
     userZipCode,
-} from "../../config/credentials";
+} from "../../config/test.data";
 import { CheckoutStepTwoPage } from "../../pages/CheckoutPages";
 
 const productsCount = [0, 1, 2, 6];

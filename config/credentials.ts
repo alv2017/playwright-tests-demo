@@ -6,7 +6,3 @@ export const standardUser = getEnv("STANDARD_USER");
 export const standardPassword = getEnv("STANDARD_PASSWORD");
 export const lockedOutUser = getEnv("LOCKED_OUT_USER");
 export const lockedOutPassword = getEnv("LOCKED_OUT_PASSWORD");
-
-export const userFirstName = getEnv("USER_FIRST_NAME");
-export const userLastName = getEnv("USER_LAST_NAME");
-export const userZipCode = getEnv("USER_ZIP_CODE");

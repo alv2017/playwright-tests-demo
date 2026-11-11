@@ -13,7 +13,7 @@ concurrency:
     cancel-in-progress: false
 
 jobs:
-    lint:
+    lint_and_validate:
         name: Lint and Format Checks
         runs-on: ubuntu-latest
         permissions:
@@ -35,6 +35,12 @@ jobs:
 
             - name: Check formatting
               run: npm run format:check
+
+            - name: Check TypeScript code without generating JavaScript
+              run: npx tsc --noEmit
+
+            - name: Validate Playwright tests
+              run: npx playwright test tests/ --list --project=chromium
 
     test:
         name: Run E2E Tests

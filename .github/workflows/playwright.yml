@@ -13,8 +13,8 @@ concurrency:
     cancel-in-progress: false
 
 jobs:
-    lint:
-        name: Lint and Format Checks
+    lint_and_validate:
+        name: Lint, Format, and Code Validation
         runs-on: ubuntu-latest
         permissions:
             contents: read
@@ -36,9 +36,15 @@ jobs:
             - name: Check formatting
               run: npm run format:check
 
+            - name: Check TypeScript code without generating JavaScript
+              run: npx tsc --noEmit
+
+            - name: Validate Playwright tests
+              run: npx playwright test tests/ --list --project=chromium
+
     test:
         name: Run E2E Tests
-        needs: lint
+        needs: lint_and_validate
         timeout-minutes: 30
         runs-on: ubuntu-latest
         outputs:
@@ -58,13 +64,27 @@ jobs:
             - name: Install Playwright Browsers
               run: npx playwright install --with-deps
 
+            - name: Check TypeScript code without generating JavaScript
+              run: npx tsc --noEmit
+
+            - name: Validate Playwright tests
+              run: npx playwright test tests/ --list --project=chromium
+
             - name: Run Playwright tests
+              id: playwright_tests
               env:
                   STANDARD_USER: ${{ secrets.STANDARD_USER }}
                   STANDARD_PASSWORD: ${{ secrets.STANDARD_PASSWORD }}
                   LOCKED_OUT_USER: ${{ secrets.LOCKED_OUT_USER }}
                   LOCKED_OUT_PASSWORD: ${{ secrets.LOCKED_OUT_PASSWORD }}
-              run: npx playwright test tests/
+              run: npx playwright test tests/ --project=chromium
+
+            - name: Warn if Playwright test failed
+              if: ${{ steps.playwright_tests.outcome == 'failure' }}
+              run: |
+                  echo "::warning title=One or more Playwright tests failed::"
+                  echo "### ⚠️ Playwright tests failed ⚠️" >> "$GITHUB_STEP_SUMMARY"
+                  echo "One or more e2e tests failed" >> "$GITHUB_STEP_SUMMARY"
 
             - name: Save Playwright report to artifacts
               id: upload-report

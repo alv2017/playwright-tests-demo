@@ -4,7 +4,6 @@ import { BasePage } from "./BasePage";
 
 class ShoppingCartPageBase extends BasePage {
     static readonly url: string = "/cart.html";
-    static readonly maxNumberOfProductsInCart: number = 6;
     numberOfProducts: number;
 
     constructor(page: Page, numberOfProducts: number = 0) {
@@ -12,7 +11,7 @@ class ShoppingCartPageBase extends BasePage {
 
         if (numberOfProducts < 0) {
             throw new Error(
-                "The number of products in the cart must be greater than 0",
+                "The number of products in the cart must be greater than or equal to 0",
             );
         }
 

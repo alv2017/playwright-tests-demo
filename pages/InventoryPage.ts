@@ -95,21 +95,4 @@ export class InventoryPage extends InventoryPageBase {
 
         await productAddToCartButton.click();
     }
-
-    async getNumberOfProductsOnCartBadge(): Promise<string> {
-        const shoppingCartBadge = this.pageHeader.locateShoppingCartBadge();
-        if ((await shoppingCartBadge.count()) === 0) {
-            return "0";
-        }
-
-        const badgeNumberString = await shoppingCartBadge.textContent();
-
-        if (!badgeNumberString?.trim()) {
-            throw new Error(
-                "Unable to read the number of products from the badge",
-            );
-        }
-
-        return badgeNumberString.trim();
-    }
 }

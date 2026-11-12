@@ -3,6 +3,7 @@ import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 
 export class BasePage {
+    protected static readonly maxNumberOfProductsInCart: number = 6;
     protected readonly page: Page;
     readonly pageHeader: Header;
     readonly pageFooter: Footer;
@@ -11,9 +12,5 @@ export class BasePage {
         this.page = page;
         this.pageHeader = new Header(page);
         this.pageFooter = new Footer(page);
-    }
-
-    getPlaywrightPage(): Page {
-        return this.page;
     }
 }

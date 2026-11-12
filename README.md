@@ -21,18 +21,34 @@ npx playwright install
 
 On Linux, you may need `npx playwright install --with-deps` to install browser system dependencies.
 
-### Configure test credentials
+### Configure the environment
 
-The configuration loads environment variables from `env/.env`. Create that file locally and set these variables using the demo credentials shown on the [SauceDemo login page](https://www.saucedemo.com/):
+This project reads SauceDemo login credentials from environment variables. [`playwright.config.ts`](playwright.config.ts) loads a local `env/.env` file with `dotenv`, while [`config/credentials.ts`](config/credentials.ts) reads the values from `process.env`.
 
-```dotenv
-STANDARD_USER=standard_user
-STANDARD_PASSWORD=secret_sauce
-LOCKED_OUT_USER=locked_out_user
-LOCKED_OUT_PASSWORD=secret_sauce
-```
+1. Copy the committed [`env/.env.example`](env/.env.example) template to `env/.env`:
 
-These values are for the public SauceDemo practice site, not real accounts. Do not commit private credentials or other secrets. The repository's `.gitignore` excludes `.env` files.
+   ```bash
+   cp env/.env.example env/.env
+   ```
+
+   On Windows PowerShell, run `Copy-Item env/.env.example env/.env` instead.
+
+2. Open `env/.env` and review the four variables:
+
+   | Variable | Purpose |
+   | --- | --- |
+   | `STANDARD_USER` | Username for successful login tests |
+   | `STANDARD_PASSWORD` | Password for the standard user |
+   | `LOCKED_OUT_USER` | Username for locked-out account tests |
+   | `LOCKED_OUT_PASSWORD` | Password used in locked-out account tests |
+
+   The template contains public practice credentials for [SauceDemo](https://www.saucedemo.com/). Replace the values if that demo site's displayed credentials change.
+
+3. Run `npx playwright test`. The local `env/.env` file is loaded when the Playwright configuration starts.
+
+**Security:** Commit `env/.env.example` as a template, but never commit your working `env/.env` file or real secrets. The repository's `.gitignore` excludes `.env` files and allows `.env.example`. If required variables are missing, `config/credentials.ts` currently substitutes the string `UNDEFINED`; confirm the values before running credential-dependent tests.
+
+**GitHub Actions:** CI does not read your local `env/.env`. The workflow passes `STANDARD_USER`, `STANDARD_PASSWORD`, `LOCKED_OUT_USER`, and `LOCKED_OUT_PASSWORD` through repository Actions secrets (see [Continuous integration](#4-continuous-integration)).
 
 ### Run tests
 
@@ -105,6 +121,7 @@ The **Playwright library** provides browser automation APIs for launching browse
 - `pages/` — page objects used by tests
 - `fixtures/` — custom test fixtures
 - `config/` — credentials and test data
+- `env/.env.example` — committed template for local environment variables
 - `playwright.config.ts` — browser projects, timeouts, reporters, and shared settings
 - `.github/workflows/playwright.yml` — CI checks, tests, and report publishing
 

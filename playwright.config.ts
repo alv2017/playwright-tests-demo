@@ -42,10 +42,10 @@ export default defineConfig({
         /* Run tests in headed mode */
         headless: true,
         /* Make screenshot on failure only */
-        screenshot: "only-on-failure",
+        screenshot: process.env.CI ? "off" : "only-on-failure",
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-        trace: "retain-on-failure",
-        video: "retain-on-failure",
+        trace: process.env.CI ? "off" : "retain-on-failure",
+        video: process.env.CI ? "off" : "retain-on-failure",
         testIdAttribute: "data-test",
     },
 

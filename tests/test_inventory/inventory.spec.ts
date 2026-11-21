@@ -312,6 +312,7 @@ test.describe("Product Sorting Order on the Page", () => {
             const actualPrices = prices.map((price) =>
                 Number(price.replace("$", "")),
             );
+            expect(actualPrices.every(Number.isFinite)).toBe(true);
 
             // get expected prices order
             const expectedPrices = [...actualPrices].sort((a, b) => a - b);
@@ -342,6 +343,7 @@ test.describe("Product Sorting Order on the Page", () => {
             const actualPrices = prices.map((price) =>
                 Number(price.replace("$", "")),
             );
+            expect(actualPrices.every(Number.isFinite)).toBe(true);
 
             // get expected prices order
             const expectedPrices = [...actualPrices].sort((a, b) => b - a);

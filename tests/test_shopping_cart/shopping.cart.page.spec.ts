@@ -2,7 +2,7 @@ import { test, expect } from "../../fixtures/fixtures.registry";
 import { InventoryPage } from "../../pages/InventoryPage";
 import { CheckoutStepOnePage } from "../../pages/CheckoutPages";
 
-const productsCount = [0, 1, 6];
+const productsCount = [0, 1, 2, 6];
 
 test.describe("Shopping Cart Page Structure", () => {
     // parameterization: carts with different number of products
@@ -67,37 +67,23 @@ test.describe("Shopping Cart Page Navigation", () => {
                 await expect(page).toHaveURL(InventoryPage.url);
             });
 
-            // run this test only when the cart is non-empty
-            if (numberOfProducts > 0) {
-                test("Check: 'Checkout' button sends user to Checkout Page", async ({
-                    shoppingCartPage,
-                    page,
-                }) => {
-                    const checkoutButton =
-                        shoppingCartPage.locateCheckoutButton();
+            test("Check: 'Checkout' button sends user to Checkout Page", async ({
+                shoppingCartPage,
+                page,
+            }) => {
+                test.fail(
+                    numberOfProducts === 0,
+                    "Known defect: Checkout process starts when the cart is empty",
+                );
 
-                    await expect(checkoutButton).toBeEnabled();
+                const checkoutButton = shoppingCartPage.locateCheckoutButton();
 
-                    await checkoutButton.click();
+                await expect(checkoutButton).toBeEnabled();
 
-                    await expect(page).toHaveURL(CheckoutStepOnePage.url);
-                });
-            }
-            // run this test only if the cart is empty
-            if (numberOfProducts === 0) {
-                test("Check: if cart is empty the 'Checkout' button must be disabled", async ({
-                    shoppingCartPage,
-                }) => {
-                    test.fail(
-                        true,
-                        "Known defect: Checkout is enabled when shopping cart is empty",
-                    );
-                    const checkoutButton =
-                        shoppingCartPage.locateCheckoutButton();
+                await checkoutButton.click();
 
-                    await expect(checkoutButton).toBeDisabled();
-                });
-            }
+                await expect(page).toHaveURL(CheckoutStepOnePage.url);
+            });
         });
     }
 });

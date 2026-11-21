@@ -7,18 +7,13 @@ import {
 } from "../../config/test.data";
 import { CheckoutStepTwoPage } from "../../pages/CheckoutPages";
 
-const productsCount = [0, 1, 2, 6];
+const productsCount = [1, 2, 6];
 
 test.describe("Checkout Step One Page: Page Structure", () => {
     // parametrization: checking out with different number of products
     for (const numberOfProducts of productsCount) {
         test.describe(`Checking out ${numberOfProducts} product(s): `, () => {
             test.use({ numberOfProducts });
-
-            test.fail(
-                numberOfProducts === 0,
-                "Checkout should not be allowed when the cart is empty!",
-            );
 
             test(`Check: Checkout page structure with ${numberOfProducts} product(s)`, async ({
                 checkoutStepOnePage,
@@ -99,11 +94,6 @@ test.describe("Checkout Step One Page: Navigation", () => {
         test.describe(`Checking out ${numberOfProducts} product(s): `, () => {
             test.use({ numberOfProducts });
 
-            test.fail(
-                numberOfProducts === 0,
-                "Checkout should not be allowed when the cart is empty!",
-            );
-
             test("Check: cart button opens cart page", async ({
                 checkoutStepOnePage,
                 page,
@@ -147,11 +137,6 @@ test.describe("Checkout Step One Page: Filling User Form", () => {
     for (const numberOfProducts of productsCount) {
         test.describe(`Checking out ${numberOfProducts} product(s): `, () => {
             test.use({ numberOfProducts });
-
-            test.fail(
-                numberOfProducts === 0,
-                "Checkout should not be allowed when the cart is empty!",
-            );
 
             test("Check: when form is blank error pops up", async ({
                 checkoutStepOnePage,

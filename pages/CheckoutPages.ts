@@ -110,4 +110,96 @@ class CheckoutBaseStepTwoPage extends BasePage {
     }
 }
 
-export class CheckoutStepTwoPage extends CheckoutBaseStepTwoPage {}
+export class CheckoutStepTwoPage extends CheckoutBaseStepTwoPage {
+    locateSecondaryHeader(): Locator {
+        return this.page.getByTestId("secondary-header").getByTestId("title");
+    }
+
+    locateCartList(): Locator {
+        return this.page.getByTestId("cart-list");
+    }
+
+    locateCartProducts(): Locator {
+        return this.page.getByTestId("inventory-item");
+    }
+
+    locateCartProductName(product: Locator): Locator {
+        return product.getByTestId("inventory-item-name");
+    }
+
+    locateCartProductQuantity(product: Locator): Locator {
+        return product.getByTestId("item-quantity");
+    }
+
+    locateCartProductPrice(product: Locator): Locator {
+        return product.getByTestId("inventory-item-price");
+    }
+
+    locateCartProductPrices(): Locator {
+        return this.page.getByTestId("inventory-item-price");
+    }
+
+    locatePaymentInfoLabel(): Locator {
+        return this.page.getByTestId("payment-info-label");
+    }
+
+    locatePaymentInfoValue(): Locator {
+        return this.page.getByTestId("payment-info-value");
+    }
+
+    locateShippingInfoLabel(): Locator {
+        return this.page.getByTestId("shipping-info-label");
+    }
+
+    locateShippingInfoValue(): Locator {
+        return this.page.getByTestId("shipping-info-value");
+    }
+
+    locatePriceTotalInfoLabel(): Locator {
+        return this.page.getByTestId("total-info-label");
+    }
+
+    locateItemTotalLabel(): Locator {
+        return this.page.getByTestId("subtotal-label");
+    }
+
+    locateTaxLabel(): Locator {
+        return this.page.getByTestId("tax-label");
+    }
+
+    locateTotalLabel(): Locator {
+        return this.page.getByTestId("total-label");
+    }
+
+    locateCancelButton(): Locator {
+        return this.page.getByRole("button", { name: "Cancel", exact: true });
+    }
+
+    locateFinishButton(): Locator {
+        return this.page.getByRole("button", { name: "Finish", exact: true });
+    }
+}
+
+class CheckoutBaseCompletePage extends BasePage {
+    static readonly url: string = "/checkout-complete.html";
+    numberOfProducts: number;
+
+    constructor(page: Page, numberOfProducts: number) {
+        super(page);
+        this.numberOfProducts = numberOfProducts;
+    }
+
+    get url(): string {
+        return CheckoutBaseCompletePage.url;
+    }
+
+    async navigate(): Promise<void> {
+        const checkoutStepTwo = new CheckoutStepTwoPage(
+            this.page,
+            this.numberOfProducts,
+        );
+        await checkoutStepTwo.locateFinishButton().click();
+    }
+}
+
+export class CheckoutCompletePage extends CheckoutBaseCompletePage {}

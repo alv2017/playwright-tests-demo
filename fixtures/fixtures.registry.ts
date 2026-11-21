@@ -9,8 +9,14 @@ import { loginPageFixture } from "./page_fixtures/login.page.fixture";
 import type { ShoppingCartPage } from "../pages/ShoppingCartPage";
 import { shoppingCartPageFixture } from "../fixtures/page_fixtures/shopping.cart.page.fixture";
 
-import type { CheckoutStepOnePage } from "../pages/CheckoutPages";
-import { checkoutStepOnePageFixture } from "../fixtures/page_fixtures/checkout.page.fixture";
+import type {
+    CheckoutStepOnePage,
+    CheckoutStepTwoPage,
+} from "../pages/CheckoutPages";
+import {
+    checkoutStepOnePageFixture,
+    checkoutStepTwoPageFixture,
+} from "../fixtures/page_fixtures/checkout.page.fixture";
 
 type PageOptions = {
     numberOfProducts: number;
@@ -21,6 +27,7 @@ type PageFixtures = {
     loginPage: LoginPage;
     shoppingCartPage: ShoppingCartPage;
     checkoutStepOnePage: CheckoutStepOnePage;
+    checkoutStepTwoPage: CheckoutStepTwoPage;
 };
 
 export const test = base.extend<PageFixtures & PageOptions>({
@@ -29,6 +36,7 @@ export const test = base.extend<PageFixtures & PageOptions>({
     loginPage: loginPageFixture,
     shoppingCartPage: shoppingCartPageFixture,
     checkoutStepOnePage: checkoutStepOnePageFixture,
+    checkoutStepTwoPage: checkoutStepTwoPageFixture,
 });
 
 export { expect } from "@playwright/test";

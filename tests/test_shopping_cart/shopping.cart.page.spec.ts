@@ -67,7 +67,6 @@ test.describe("Shopping Cart Page Navigation", () => {
                 await expect(page).toHaveURL(InventoryPage.url);
             });
 
-            // run this test only when the cart is non-empty
             test("Check: 'Checkout' button sends user to Checkout Page", async ({
                 shoppingCartPage,
                 page,
